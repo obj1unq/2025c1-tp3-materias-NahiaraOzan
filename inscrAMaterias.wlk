@@ -10,14 +10,57 @@ class Carrera {
 
 class Materia {
     const property correlativas = [] 
+    const property inscriptos = []
+    const property listaDeEspera = []  
+    const property cupo 
+
+    method agregarAInscriptos(alumno){
+        inscriptos.add(alumno)
+    }
+    method agregarAListaDeEspera(alumno){
+        listaDeEspera.add(alumno)
+    }
+    method removerDeInscriptos(alumno){
+        inscriptos.remove(alumno)
+    }
+    method darCupo(){
+        if (listaDeEspera.notEmpty()){
+            const alumno = listaDeEspera.first()
+            inscriptos.add(alumno)
+            alumno.removerMateriaEnEspera(self)
+            alumno.materiasInscriptas().add(self)
+        }
+    }
 }
 
 class Estudiante {
     const materiasAprobadas = []
     const property carrerasEnCurso = []
-    const materiasInscriptas = [] //Lista de lista de materias por carrera
+    const materiasInscriptas = [] 
+    const materiasEnEspera = []
 
-    method materiasAprobadas(){
+    method materiasEnCurso(){
+        return self.todasLasMateriasDeCarrerasInscriptas().filter({materia => materia.inscriptos().contains(self)})
+    }
+    method materiasEnCola() {
+        return self.todasLasMateriasDeCarrerasInscriptas().filter({materia => materia.listaDeEspera().contains(self)})
+    }
+
+    method removerMateriaEnEspera(_materia){
+        self.validarSiSePuedeRemover(_materia)
+        materiasEnEspera.remove(_materia)
+    }
+
+    method validarSiSePuedeRemover(_materia){
+        if (not self.sePuedeRemover(_materia))
+            self.error ("la materia no esta en la lista de espera")
+    }
+
+    method sePuedeRemover(_materia){
+        return materiasEnEspera.contains(_materia)
+    }
+
+    method aprobaciones(){
         return materiasAprobadas
     }
 
@@ -54,11 +97,15 @@ class Estudiante {
     }
 
     method tieneAprobada(_materia) {
-        return materiasAprobadas.any ({cursada => cursada.materia() == _materia })
+        return materiasAprobadas.any({cursada => cursada.materia() == _materia })
     }
 
-    method materiasInscriptas() {
-        return materiasInscriptas.flatten() 
+    method todasLasMateriasDeCarrerasInscriptas() {
+        return self.materiasDeCarreras().flatten()
+    }
+
+    method materiasDeCarreras() {
+        return carrerasEnCurso.map({carrera => carrera.materias()})
     }
 
     method puedeInscribirseA(_materia) {
@@ -67,16 +114,43 @@ class Estudiante {
                 not self.tieneAprobada(_materia)
                 and 
                 not materiasInscriptas.contains(_materia)
-                and self.cumpleCorrelativas(_materia)        
+                and 
+                self.cumpleCorrelativas(_materia)        
     }
 
     method perteneceACarrerasCursando(_materia) {
         return carrerasEnCurso.any({carrera => carrera.materias().contains(_materia) }) //deberia hacer una subtarea para el contains? Si fuera el caso, esa subatera seria responsabilidad del estudiante?
     }
 
-    method cumpleCorrelativas() {
-        return
+    method cumpleCorrelativas(_materia) {
+        return _materia.correlativas().all({materia => self.tieneAprobada(_materia)})
     }
 
+    method inscribirAMateria(_materia) {
+        self.validarSiPuedeInscribirAMateria(_materia)
+        if (_materia.cupo() > _materia.inscriptos().size()) {
+            _materia.agregarAInscriptos(self)
+            materiasInscriptas.add(_materia)
+        }
+        else
+           _materia.agregarAListaDeEspera(self)
+           materiasEnEspera.add(_materia)
+    }
+
+    method validarSiPuedeInscribirAMateria(_materia) {
+        if (not self.puedeInscribirseA(_materia)) {
+            self.error ("No cumple los requisitos para anotarse a la materia dada")
+        }
+    }
+
+    method darDeBajaMateria(_materia) {
+        materiasInscriptas.remove(_materia)
+        _materia.removerDeInscriptos(self)
+        _materia.darCupo()
+    }
+
+    method materiasALasQueSePuedeInscribirDe(_carrera) {
+        _carrera.filter({materia => self.puedeInscribirseA(materia)})
+    }
     
 }
