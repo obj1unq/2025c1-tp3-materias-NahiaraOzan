@@ -1,7 +1,6 @@
-//Hago commit por miedo a que se me corte la luz y no tenga subido nada
 class  Cursada {
-    const property materia
-    const property nota
+    var property materia
+    var property nota
 }
 
 class Carrera {
@@ -9,9 +8,9 @@ class Carrera {
 }
 
 class Materia {
-    const property correlativas = [] 
-    const property inscriptos = []
-    const property listaDeEspera = []  
+    var property correlativas = [] 
+    var property inscriptos = []
+    var property listaDeEspera = []  
     const property cupo 
 
     method agregarAInscriptos(alumno){
@@ -24,18 +23,18 @@ class Materia {
         inscriptos.remove(alumno)
     }
     method darCupo(){
-        if (listaDeEspera.notEmpty()){
-            const alumno = listaDeEspera.first()
+        if (not listaDeEspera.isEmpty()){
+            var alumno = listaDeEspera.first()
             inscriptos.add(alumno)
             alumno.removerMateriaEnEspera(self)
-            alumno.materiasInscriptas().add(self)
+            alumno.materiasEnCurso().add(self)
         }
     }
 }
 
 class Estudiante {
     const materiasAprobadas = []
-    const property carrerasEnCurso = []
+    var property carrerasEnCurso = []
     const materiasInscriptas = [] 
     const materiasEnEspera = []
 
@@ -123,7 +122,7 @@ class Estudiante {
     }
 
     method cumpleCorrelativas(_materia) {
-        return _materia.correlativas().all({materia => self.tieneAprobada(_materia)})
+        return _materia.correlativas().all({correlativa => self.tieneAprobada(correlativa)})
     }
 
     method inscribirAMateria(_materia) {
@@ -150,7 +149,9 @@ class Estudiante {
     }
 
     method materiasALasQueSePuedeInscribirDe(_carrera) {
-        _carrera.filter({materia => self.puedeInscribirseA(materia)})
+       return  _carrera.materias().filter({materia => self.puedeInscribirseA(materia)})
     }
     
 }
+
+

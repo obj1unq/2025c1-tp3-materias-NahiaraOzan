@@ -9,39 +9,115 @@ describe "tests" {
 // Tenemos a: Luisa, Romina y Alicia que aprobaron Elementos de Programación, Objetos 1, y Matemática 1;
 // Ana que aprobó solamente Elementos de Programación. Todas están cursando Programación.
 // Objetos 2 tiene cupo para 3 estudiantes.
-    const programacion = new Carrera(materias = [elementosDeProgramacion, matematica1, objetos1, objetos2, objetos3, basesDeDatos, trabajoFinal])
-    const medicina = new Carrera(materias = [quimica, biologia1, biologia2, anatomiaGeneral])
-    const matematica1 = new Materia(correlativas = [] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const elementosDeProgramacion = new Materia(correlativas = [] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const objetos1 = new Materia(correlativas = [elementosDeProgramacion] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const basesDeDatos = new Materia(correlativas = [elementosDeProgramacion, matematica1] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const objetos2 = new Materia(correlativas = [objetos1, matematica1] , inscriptos = [], listaDeEspera = [], cupo = 3)
-    const objetos3 = new Materia(correlativas = [matematica1, objetos2] , inscriptos = [], listaDeEspera = [], cupo = 3)
-    const programacionConcurrente = new Materia(correlativas = [objetos1, basesDeDatos] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const trabajoFinal = new Materia(correlativas = [objetos3, basesDeDatos, matematica1, programacionConcurrente] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const biologia1 = new Materia(correlativas = [] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const biologia2 = new Materia(correlativas = [biologia1] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const quimica   = new Materia(correlativas = [] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const anatomiaGeneral = new Materia(correlativas = [quimica, biologia2] , inscriptos = [], listaDeEspera = [], cupo = 10)
-    const roque = new Estudiante(materiasAprobadas = [elementosDeProgramacion, matematica1, objetos1, basesDeDatos, 
-                        quimica, biologia1] , carrerasEnCurso = [programacion, medicina], materiasInscriptas = [], materiasEnEspera = [])
-    const luisa = new Estudiante(materiasAprobadas = [elementosDeProgramacion, matematica1, objetos1] , 
-                                carrerasEnCurso = [programacion], materiasInscriptas = [], materiasEnEspera = [])
-    const romina = new Estudiante(materiasAprobadas = [elementosDeProgramacion, matematica1, objetos1] , 
-                                carrerasEnCurso = [programacion], materiasInscriptas = [], materiasEnEspera = [])
-    const alicia = new Estudiante(materiasAprobadas = [elementosDeProgramacion, matematica1, objetos1] , 
-                                carrerasEnCurso = [programacion], materiasInscriptas = [], materiasEnEspera = [])
-    const ana = new Estudiante(materiasAprobadas = [elementosDeProgramacion] , carrerasEnCurso = [programacion], materiasInscriptas = [], materiasEnEspera = [])
+
+    const programacion = new Carrera( materias = [elementosDeProgramacion, objetos1, matematica1, basesDeDatos, objetos2, programacionConcurrente])
+    const medicina = new Carrera( materias = [quimica, biologia1, biologia2, anatomiaGeneral])
+
+    const anatomiaGeneral = new Materia( cupo = 30, correlativas = [quimica, biologia2])
+
+    const elementosDeProgramacion = new Materia( cupo = 30)
+    const matematica1 = new Materia( cupo = 30)
+    const objetos1 = new Materia( cupo = 30)
+    const basesDeDatos = new Materia( cupo = 30)
+    const quimica = new Materia(cupo = 30)
+    const biologia1 = new Materia(cupo = 30)
+
+
+    const objetos2 = new Materia( cupo = 3, correlativas = [objetos1, matematica1])
+    const objetos3 = new Materia(cupo = 30, correlativas = [objetos2, basesDeDatos])
+    const programacionConcurrente = new Materia(cupo = 30, correlativas = [objetos1, basesDeDatos])
+    const biologia2 = new Materia(cupo = 30, correlativas = [biologia1])
+
+    
+    const roque = new Estudiante(
+        materiasAprobadas = [
+        new Cursada(materia = elementosDeProgramacion, nota = 6),
+        new Cursada(materia = matematica1, nota = 6),
+        new Cursada(materia = objetos1, nota = 6),
+        new Cursada(materia = basesDeDatos, nota = 6),
+        new Cursada(materia = quimica, nota = 6),
+        new Cursada(materia = biologia1, nota = 6)
+        ],
+        carrerasEnCurso = [programacion, medicina],
+        materiasInscriptas = [],
+        materiasEnEspera = []
+        )
+    const luisa = new Estudiante(
+        materiasAprobadas = [
+        new Cursada(materia = elementosDeProgramacion, nota = 8),
+        new Cursada(materia = objetos1, nota = 7),
+        new Cursada(materia = matematica1, nota = 9)
+        ],
+        carrerasEnCurso = [programacion],
+        materiasInscriptas = [],
+        materiasEnEspera = []
+    )
+
+    const romina = new Estudiante(
+        materiasAprobadas = [
+        new Cursada(materia = elementosDeProgramacion, nota = 6),
+        new Cursada(materia = objetos1, nota = 8),
+        new Cursada(materia = matematica1, nota = 7)
+        ],
+        carrerasEnCurso = [programacion],
+        materiasInscriptas = [],
+        materiasEnEspera = []
+    )
+
+    const alicia = new Estudiante(
+        materiasAprobadas = [
+        new Cursada(materia = elementosDeProgramacion, nota = 9),
+        new Cursada(materia = objetos1, nota = 7),
+        new Cursada(materia = matematica1, nota = 8)
+        ],
+        carrerasEnCurso = [programacion],
+        materiasInscriptas = [],
+        materiasEnEspera = []
+    )
+
+    const ana = new Estudiante(
+        materiasAprobadas = [
+        new Cursada(materia = elementosDeProgramacion, nota = 7)
+        ],
+        carrerasEnCurso = [programacion],
+        materiasInscriptas = [],
+        materiasEnEspera = []
+    )
 
     test "test1" {
-        assert.that(roque.inscribirAMateria(objetos2))
-        assert.notThat(roque.inscribirAMateria(objetos3))
-        assert.notThat(roque.inscribirAMateria(objetos1))
+        assert.that(roque.puedeInscribirseA(objetos2))
+        assert.notThat(roque.puedeInscribirseA(objetos3))
+        assert.notThat(roque.puedeInscribirseA(objetos1))
     }
 
     test "test2" {
-      assert.that(roque.puedeInscribirseA(objetos2))
-      assert.that(roque.puedeInscribirseA(programacionConcurrente))
-      assert.that(roque.puedeInscribirseA(biologia2))
+        assert.that(roque.puedeInscribirseA(objetos2))
+        assert.that(roque.puedeInscribirseA(programacionConcurrente))
+        assert.that(roque.puedeInscribirseA(biologia2))
     }
+
+    test "test3" {
+        luisa.inscribirAMateria(objetos2)
+        romina.inscribirAMateria(objetos2)
+        alicia.inscribirAMateria(objetos2)
+        roque.inscribirAMateria(objetos2)
+        assert.that(luisa.materiasEnCurso().contains(objetos2))
+        assert.that(romina.materiasEnCurso().contains(objetos2))
+        assert.that(alicia.materiasEnCurso().contains(objetos2))
+        assert.that(roque.materiasEnCola().contains(objetos2))
+    }
+
+    test "test4" {
+        luisa.inscribirAMateria(objetos2)
+        romina.inscribirAMateria(objetos2)
+        alicia.inscribirAMateria(objetos2)
+        roque.inscribirAMateria(objetos2)
+        assert.that(luisa.materiasEnCurso().contains(objetos2))
+        assert.that(romina.materiasEnCurso().contains(objetos2))
+        assert.that(alicia.materiasEnCurso().contains(objetos2))
+        assert.that(roque.materiasEnCola().contains(objetos2))
+        romina.darDeBajaMateria(objetos2)
+        assert.that(roque.materiasEnCurso().contains(objetos2))
+    }
+
 }
