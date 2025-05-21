@@ -31,57 +31,47 @@ describe "tests" {
     
     const roque = new Estudiante(
         materiasAprobadas = [
-        new Cursada(materia = elementosDeProgramacion, nota = 6),
-        new Cursada(materia = matematica1, nota = 6),
-        new Cursada(materia = objetos1, nota = 6),
-        new Cursada(materia = basesDeDatos, nota = 6),
-        new Cursada(materia = quimica, nota = 6),
-        new Cursada(materia = biologia1, nota = 6)
+        new Aprobada(materia = elementosDeProgramacion, nota = 6),
+        new Aprobada(materia = matematica1, nota = 6),
+        new Aprobada(materia = objetos1, nota = 6),
+        new Aprobada(materia = basesDeDatos, nota = 6),
+        new Aprobada(materia = quimica, nota = 6),
+        new Aprobada(materia = biologia1, nota = 6)
         ],
-        carrerasEnCurso = [programacion, medicina],
-        materiasInscriptas = [],
-        materiasEnEspera = []
+        carrerasEnCurso = [programacion, medicina]
         )
     const luisa = new Estudiante(
         materiasAprobadas = [
-        new Cursada(materia = elementosDeProgramacion, nota = 8),
-        new Cursada(materia = objetos1, nota = 7),
-        new Cursada(materia = matematica1, nota = 9)
+        new Aprobada(materia = elementosDeProgramacion, nota = 8),
+        new Aprobada(materia = objetos1, nota = 7),
+        new Aprobada(materia = matematica1, nota = 9)
         ],
-        carrerasEnCurso = [programacion],
-        materiasInscriptas = [],
-        materiasEnEspera = []
+        carrerasEnCurso = [programacion]
     )
 
     const romina = new Estudiante(
         materiasAprobadas = [
-        new Cursada(materia = elementosDeProgramacion, nota = 6),
-        new Cursada(materia = objetos1, nota = 8),
-        new Cursada(materia = matematica1, nota = 7)
+        new Aprobada(materia = elementosDeProgramacion, nota = 6),
+        new Aprobada(materia = objetos1, nota = 8),
+        new Aprobada(materia = matematica1, nota = 7)
         ],
-        carrerasEnCurso = [programacion],
-        materiasInscriptas = [],
-        materiasEnEspera = []
+        carrerasEnCurso = [programacion]
     )
 
     const alicia = new Estudiante(
         materiasAprobadas = [
-        new Cursada(materia = elementosDeProgramacion, nota = 9),
-        new Cursada(materia = objetos1, nota = 7),
-        new Cursada(materia = matematica1, nota = 8)
+        new Aprobada(materia = elementosDeProgramacion, nota = 9),
+        new Aprobada(materia = objetos1, nota = 7),
+        new Aprobada(materia = matematica1, nota = 8)
         ],
-        carrerasEnCurso = [programacion],
-        materiasInscriptas = [],
-        materiasEnEspera = []
+        carrerasEnCurso = [programacion]
     )
 
     const ana = new Estudiante(
         materiasAprobadas = [
-        new Cursada(materia = elementosDeProgramacion, nota = 7)
+        new Aprobada(materia = elementosDeProgramacion, nota = 7)
         ],
-        carrerasEnCurso = [programacion],
-        materiasInscriptas = [],
-        materiasEnEspera = []
+        carrerasEnCurso = [programacion]
     )
 
     test "test1" {
@@ -101,10 +91,10 @@ describe "tests" {
         romina.inscribirAMateria(objetos2)
         alicia.inscribirAMateria(objetos2)
         roque.inscribirAMateria(objetos2)
-        assert.that(luisa.materiasEnCurso().contains(objetos2))
-        assert.that(romina.materiasEnCurso().contains(objetos2))
-        assert.that(alicia.materiasEnCurso().contains(objetos2))
-        assert.that(roque.materiasEnCola().contains(objetos2))
+        assert.that(objetos2.inscriptos().contains(luisa))
+        assert.that(objetos2.inscriptos().contains(romina))
+        assert.that(objetos2.inscriptos().contains(alicia))
+        assert.that(objetos2.listaDeEspera().contains(roque))
     }
 
     test "test4" {
@@ -112,12 +102,12 @@ describe "tests" {
         romina.inscribirAMateria(objetos2)
         alicia.inscribirAMateria(objetos2)
         roque.inscribirAMateria(objetos2)
-        assert.that(luisa.materiasEnCurso().contains(objetos2))
-        assert.that(romina.materiasEnCurso().contains(objetos2))
-        assert.that(alicia.materiasEnCurso().contains(objetos2))
-        assert.that(roque.materiasEnCola().contains(objetos2))
-        romina.darDeBajaMateria(objetos2)
-        assert.that(roque.materiasEnCurso().contains(objetos2))
+        assert.that(objetos2.inscriptos().contains(luisa))
+        assert.that(objetos2.inscriptos().contains(romina))
+        assert.that(objetos2.inscriptos().contains(alicia))
+        assert.that(objetos2.listaDeEspera().contains(roque))
+        objetos2.darDeBaja(romina)
+        assert.that(objetos2.inscriptos().contains(roque))
     }
 
 }
