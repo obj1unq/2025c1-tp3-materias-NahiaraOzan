@@ -1,0 +1,113 @@
+import inscrAMaterias.*
+
+describe "tests" {
+// los requisitos de Objetos 2 son Objetos 1 y Matemática 1.
+// Los requisitos de Objetos 3 son Objetos 2 y Bases de Datos.
+// Los requisitos de Programación Concurrente son Objetos 1 y Bases de Datos.
+// Biología 2 tiene como único requisito a Biología 1.
+// Roque tiene aprobadas Elementos de Programación, Matemática 1, Objetos 1, Bases de Datos, Química y Biología 1.
+// Tenemos a: Luisa, Romina y Alicia que aprobaron Elementos de Programación, Objetos 1, y Matemática 1;
+// Ana que aprobó solamente Elementos de Programación. Todas están cursando Programación.
+// Objetos 2 tiene cupo para 3 estudiantes.
+
+    const programacion = new Carrera( materias = [elementosDeProgramacion, objetos1, matematica1, basesDeDatos, objetos2, programacionConcurrente])
+    const medicina = new Carrera( materias = [quimica, biologia1, biologia2, anatomiaGeneral])
+
+    const anatomiaGeneral = new Materia( cupo = 30, correlativas = [quimica, biologia2])
+
+    const elementosDeProgramacion = new Materia( cupo = 30)
+    const matematica1 = new Materia( cupo = 30)
+    const objetos1 = new Materia( cupo = 30)
+    const basesDeDatos = new Materia( cupo = 30)
+    const quimica = new Materia(cupo = 30)
+    const biologia1 = new Materia(cupo = 30)
+
+
+    const objetos2 = new Materia( cupo = 3, correlativas = [objetos1, matematica1])
+    const objetos3 = new Materia(cupo = 30, correlativas = [objetos2, basesDeDatos])
+    const programacionConcurrente = new Materia(cupo = 30, correlativas = [objetos1, basesDeDatos])
+    const biologia2 = new Materia(cupo = 30, correlativas = [biologia1])
+
+    
+    const roque = new Estudiante(
+        materiasAprobadas = [
+        new Aprobada(materia = elementosDeProgramacion, nota = 6),
+        new Aprobada(materia = matematica1, nota = 6),
+        new Aprobada(materia = objetos1, nota = 6),
+        new Aprobada(materia = basesDeDatos, nota = 6),
+        new Aprobada(materia = quimica, nota = 6),
+        new Aprobada(materia = biologia1, nota = 6)
+        ],
+        carrerasEnCurso = [programacion, medicina]
+        )
+    const luisa = new Estudiante(
+        materiasAprobadas = [
+        new Aprobada(materia = elementosDeProgramacion, nota = 8),
+        new Aprobada(materia = objetos1, nota = 7),
+        new Aprobada(materia = matematica1, nota = 9)
+        ],
+        carrerasEnCurso = [programacion]
+    )
+
+    const romina = new Estudiante(
+        materiasAprobadas = [
+        new Aprobada(materia = elementosDeProgramacion, nota = 6),
+        new Aprobada(materia = objetos1, nota = 8),
+        new Aprobada(materia = matematica1, nota = 7)
+        ],
+        carrerasEnCurso = [programacion]
+    )
+
+    const alicia = new Estudiante(
+        materiasAprobadas = [
+        new Aprobada(materia = elementosDeProgramacion, nota = 9),
+        new Aprobada(materia = objetos1, nota = 7),
+        new Aprobada(materia = matematica1, nota = 8)
+        ],
+        carrerasEnCurso = [programacion]
+    )
+
+    const ana = new Estudiante(
+        materiasAprobadas = [
+        new Aprobada(materia = elementosDeProgramacion, nota = 7)
+        ],
+        carrerasEnCurso = [programacion]
+    )
+
+    test "test1" {
+        assert.that(roque.puedeInscribirseA(objetos2))
+        assert.notThat(roque.puedeInscribirseA(objetos3))
+        assert.notThat(roque.puedeInscribirseA(objetos1))
+    }
+
+    test "test2" {
+        assert.that(roque.puedeInscribirseA(objetos2))
+        assert.that(roque.puedeInscribirseA(programacionConcurrente))
+        assert.that(roque.puedeInscribirseA(biologia2))
+    }
+
+    test "test3" {
+        luisa.inscribirAMateria(objetos2)
+        romina.inscribirAMateria(objetos2)
+        alicia.inscribirAMateria(objetos2)
+        roque.inscribirAMateria(objetos2)
+        assert.that(objetos2.inscriptos().contains(luisa))
+        assert.that(objetos2.inscriptos().contains(romina))
+        assert.that(objetos2.inscriptos().contains(alicia))
+        assert.that(objetos2.listaDeEspera().contains(roque))
+    }
+
+    test "test4" {
+        luisa.inscribirAMateria(objetos2)
+        romina.inscribirAMateria(objetos2)
+        alicia.inscribirAMateria(objetos2)
+        roque.inscribirAMateria(objetos2)
+        assert.that(objetos2.inscriptos().contains(luisa))
+        assert.that(objetos2.inscriptos().contains(romina))
+        assert.that(objetos2.inscriptos().contains(alicia))
+        assert.that(objetos2.listaDeEspera().contains(roque))
+        objetos2.darDeBaja(romina)
+        assert.that(objetos2.inscriptos().contains(roque))
+    }
+
+}
